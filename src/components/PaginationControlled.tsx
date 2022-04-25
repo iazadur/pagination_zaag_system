@@ -1,5 +1,5 @@
-// import Pagination from '@mui/material/Pagination';
-import { Pagination, Stack, Typography } from '@mui/material';
+
+import { Pagination, Stack } from '@mui/material';
 import * as React from 'react';
 interface IProps {
 	page: number,
@@ -15,7 +15,7 @@ export const PaginationControlled: React.FC<IProps> = ({ page, setPage, posts })
 
 	return (
 		<Stack spacing={2}>
-			<Typography>Page: {pages}</Typography>
+			{/* <Typography>Page: {pages}</Typography> */}
 			<Pagination count={posts.length / 10} page={pages} onChange={handleChange} />
 		</Stack>
 	);

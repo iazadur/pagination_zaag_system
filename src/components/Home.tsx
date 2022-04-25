@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 // @flow 
-import { Box, Container, Grid } from '@mui/material';
+import { Box, Container, Grid, Snackbar } from '@mui/material';
 import axios from 'axios';
 import * as React from 'react';
 import { PaginationControlled } from './PaginationControlled';
@@ -13,8 +14,18 @@ export const Home: React.FC<PostsProps> = () => {
 		axios.get('https://hn.algolia.com/api/v1/search_by_date?tags=story&page=0')
 			.then(res => {
 				setPosts([...posts, ...res.data?.hits])
+				if (res.data) {
+					return (
+						<Snackbar
+							open={true}
+							autoHideDuration={2000}
+							message="Note archived"
+						/>
+					)
+				}
 			})
 			.catch(error => {
+				console.log("error", error);
 
 			})
 	}
@@ -22,14 +33,23 @@ export const Home: React.FC<PostsProps> = () => {
 
 		getPosts()
 
-		setInterval(() => {
-			getPosts()
-		}, 12 * 1000)
 
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
+	React.useEffect(() => {
+		setTimeout(() => {
+			getPosts()
+
+		}, 10 * 1000);
+
+
+	}, [posts])
+
+
 	console.log(posts.length);
+
+
+
 
 	return (
 		<>
