@@ -1,16 +1,12 @@
-import React from 'react';
-import './App.css';
-import PaginationControlled from './components/PaginationControlled';
+import { Home } from './components/Home';
 
 function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
+    <>
+      <Home />
+    </>
 
-        <PaginationControlled />
-      </header>
-
-    </div>
   );
 }
 
