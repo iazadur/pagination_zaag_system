@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // @flow 
-import { Box, Container, Grid, Snackbar } from '@mui/material';
+import { Alert, Box, Container, Grid, Snackbar } from '@mui/material';
 import axios from 'axios';
 import * as React from 'react';
 import { PaginationControlled } from './PaginationControlled';
@@ -10,18 +10,26 @@ interface PostsProps {
 export const Home: React.FC<PostsProps> = () => {
 	const [page, setPage] = React.useState<number>(0)
 	const [posts, setPosts] = React.useState<IPosts[]>([])
+	const [open, setOpen] = React.useState<boolean>(false)
+
+	const handleClick = () => {
+		setOpen(true);
+	};
+
+	const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+		if (reason === 'clickaway') {
+			return;
+		}
+
+		setOpen(false);
+	};
 	const getPosts = () => {
 		axios.get('https://hn.algolia.com/api/v1/search_by_date?tags=story&page=0')
 			.then(res => {
 				setPosts([...posts, ...res.data?.hits])
-				if (res.data) {
-					return (
-						<Snackbar
-							open={true}
-							autoHideDuration={2000}
-							message="Note archived"
-						/>
-					)
+				if (res.data?.hits) {
+
+					handleClick()
 				}
 			})
 			.catch(error => {
@@ -30,8 +38,10 @@ export const Home: React.FC<PostsProps> = () => {
 			})
 	}
 	React.useEffect(() => {
+		if (!posts.length) {
 
-		getPosts()
+			getPosts()
+		}
 
 
 	}, [])
@@ -40,7 +50,7 @@ export const Home: React.FC<PostsProps> = () => {
 		setTimeout(() => {
 			getPosts()
 
-		}, 10 * 1000);
+		}, 12000);
 
 
 	}, [posts])
@@ -54,6 +64,11 @@ export const Home: React.FC<PostsProps> = () => {
 	return (
 		<>
 			<Container>
+				<Snackbar open={open} autoHideDuration={4000} onClose={handleClose}>
+					<Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+						New blog available now!
+					</Alert>
+				</Snackbar>
 				<Grid container spacing={2}>
 
 
